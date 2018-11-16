@@ -1,14 +1,88 @@
-\documentclass{article}
-\usepackage[utf8]{inputenc}
+\documentclass[3p]{elsarticle}
+\usepackage{geometry} \geometry{ a4paper, total={160mm,247mm},  left=25mm,  top=25mm, } % please don't change geometry settings!
+\usepackage{layout}
+\usepackage[english]{babel}
+\usepackage{fancyhdr}
+\usepackage{indentfirst}
+\usepackage{hyperref}
+\usepackage{subfigure}
+\usepackage{caption}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{mathptmx} 
+\usepackage[mathscr]{euscript}
 
-\title{ERMSAR 2019}
-\author{niamor51290 }
-\date{November 2018}
+\makeatletter
+\def\ps@pprintTitle{
+      \let\@oddhead\@empty
+      \let\@evenhead\@empty
+      \def\@oddfoot{\reset@font\hfil\thepage\hfil}
+      \let\@evenfoot\@oddfoot
+}
+\makeatother
+
+\pagenumbering{gobble}
+\pagestyle{fancy}
+%\fancyhf{}
+\lhead[O,E]{\small The 9TH European Review Meeting on Severe Accident Research (ERMSAR2019) \hfill Log Number: xxx \\ 
+Clarion Congress Hotel, Prague, Czech Republic, March 18-20, 2019 \vfill}
+\renewcommand{\headrulewidth}{0pt}
+%\fancyfoot[CO,CE]{}
+
+%\setlength{\parskip}{1em}
+
+% \renewenvironment{abstract}{\global\setbox\absbox=\vbox\bgroup
+%   \hsize=\textwidth\def\baselinestretch{1}%
+%   \noindent\unskip\begin{center}\textbf{Abstract}\end{center}
+%  \par\medskip\noindent\unskip\ignorespaces}
+%  {\egroup}
+ 
+\bibliographystyle{elsarticle-num}
 
 \begin{document}
+\begin{frontmatter}
+\title{Consistent use of CALPHAD data for in-vessel corium pool modeling: \\ some analytical and practical considerations}
+\author[address]{R. Le Tellier} \corref{mycorrespondingauthor}
+\ead{romain.le-tellier@cea.fr}  
+\author[address]{B. Habert}  
+\author[address]{V. Tiwari}  
+\author[addressEDF]{N. Bakouta}
+\cortext[mycorrespondingauthor]{Corresponding author}
 
-\maketitle
+\address[address]{CEA, DEN, DTN/SMTA/LMAG, Cadarache \\
+  F-13108 Saint Paul-lez-Durance, France}
+\address[addressEDF]{EDF Lab Paris-Saclay \\
+  7, boulevard Gaspard Monge \\
+  F-91120, Palaiseau, France}
+\begin{abstract} 
 
-\section{Introduction}
+This work pertains to the modeling of in-vessel corium pool within the framework of Severe Accident studies for Light Water Reactors (LWRs). Considering in particular ``In-Vessel Retention'' (IVR) safety strategies, a key element is the phenomenology associated with a corium pool that can be formed after the loss of the primary coolant and the induced core degradation. Indeed, the heat flux from the corium pool to the vessel wall determines the chances of success of a reactor pit reflooding strategy (``External Reactor Vessel Cooling'' ERVC). %The behavior of a corium pool results from the combination of two main types of phenomena. While, the associated thermochemistry defines the segregation of the pool in different phases (both liquid and solid), thermohydraulics finally determines through natural convection (that may be laminar or turbulent depending on the size) the heat flux at the pool interface.
+
+% In this context, code cross-comparisons \cite{Bakouta2015} performed by CEA and EDF on the stratified in-vessel corium pool models of PROCOR (CEA, see \cite{LeTellier2015}) and EDF’s proprietary versions of MAAP4 \cite{maap4} and MAAP5 \cite{maap5} (indistinctly referred to as MAAP-EDF in the remainder) have shown that an important source of discrepancy is related to the associated thermodynamic representation of the sub-oxidized corium-steel system. 
+In this context, as pointed out in the PIRT (Phenomena Identification Ranking Table) developed in the frame of the H2020 European project IVMR (In-Vessel Melt Retention), the associated thermodynamic representation of the sub-oxidized corium-steel system is of prime importance. In addition to thermochemical modeling aspects related to phase-component partitioning (e.g. for the liquid phases and the related phase stratification), such thermodynamic information is needed in order to provide closures to the integral energy conservations, in particular in terms of enthalpy-temperature relations as a function of the composition.
+
+In order to ensure thermodynamic consistency among the in-vessel corium related models, we have proposed to construct a so-called ``Equation-Of-State'' (EOS) for in-vessel corium based on an extensive use of the information given in thermodynamic databases constructed by the CALPHAD approach \cite{Lukas2007}. This work has been motivated by the fact that various thermochemical models that are used for in-vessel corium behavior are based in one way or the other on thermodynamical description of the corium system through databases obtained with the CALPHAD approach. In \cite{Tiwari2018}, a preliminary study was carried out on a simple plane front solidification model for the ternary U-O-Zr system and the results have confirmed the feasibility of using the CALPHAD database to obtain thermodynamically consistent closures for the conservation equations. 
+
+In this preliminary work, two major ``simplifications'' were made and require further analysis. On the one hand, under the hypotheses of this solidification model, both liquid and solid regions are monophasic in such a way that they can be directly related to the phases described in the CALPHAD database. In the general case, CALPHAD data should be supplemented by phase segregation hypotheses and models for the construction of the desired EOS. %It should be emphasized that these hypotheses should be made, as far as possible, consistent with in-vessel corium associated thermochemical models to which the thermal balance is coupled with. 
+On the other hand, this solidification model, from the point of view of CALPHAD-derived quantities (including thermodynamic equilibria), makes direct use of a Gibbs energy minimizing code (the Open-Calphad code as interfaced in PROCOR, see \cite{Sundman2016}). Considering the complete modeling of in-vessel corium, for the sake of robustness and performances, this direct approach appears impractical. As a consequence, tabulation and interpolation strategies regarding the CALPHAD-based thermodynamic properties (e.g. \cite{Saad2015}) have to be envisaged.
+
+This paper will be focused on these two differents aspects associated with the consistent and practical use of CALPHAD data for in-vessel corium pool modeling.
+First, different segregation hypotheses that can be made when constructing such an EOS will be discussed and analyzed for the steel-corium system on a simple test case.
+Then, recent developments regarding the sampling, storage and interpolation of CALPHAD-based thermodynamic properties for the EOS construction will be presented.
+%From there, recommendations for constructing a complete EOS to be used in severe accident codes are given.
+
+\end{abstract}
+
+\begin{keyword}
+
+\texttt{in-vessel corium, CALPHAD, thermodynamic properties, tabulation, interpolation}
+
+\end{keyword}
+
+\end{frontmatter}
+
+\thispagestyle{fancy} 
+
+\bibliography{../References/lma-jabref}
 
 \end{document}
