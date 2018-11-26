@@ -183,7 +183,7 @@ The different cases that are compared are summarized in \Tab{eos} in terms of se
 & & path & inter-liquid transfer$^\dagger$ & \n \hline
 \T{equilibrium} & \multirow{2}{*}{yes} & \multirow{2}{*}{lever-rule} & \multirow{2}{*}{yes} & \multirow{2}{*}{yes} \n
 (see \Fig{x-T_C32_1850_OpenCalphad_NUCLEA9_eq}) & & & & \n \hline
-\T{MAAP-like} & \multirow{2}{*}{no} & \multirow{2}{*}{lever-rule} & \multirow{2}{*}{yes} & \multirow{2}{*}{yes} \n
+\T{independent systems} & \multirow{2}{*}{no} & \multirow{2}{*}{lever-rule} & \multirow{2}{*}{yes} & \multirow{2}{*}{yes} \n
 (see \Fig{x-T_C32_1850_OpenCalphad_NUCLEA9_separatedEqs}) & & & & \n \hline
 \T{Scheil-Gulliver} & \multirow{2}{*}{yes} & \multirow{2}{*}{Scheil-Gulliver} & \multirow{2}{*}{yes} & \multirow{2}{*}{yes} \n
 (see \Fig{x-T_C32_1850_OpenCalphad_NUCLEA9_scheilGulliver}) & & & & \n \hline
@@ -195,7 +195,7 @@ The different cases that are compared are summarized in \Tab{eos} in terms of se
 \end{scriptsize}
 \begin{legend}
  $^\dagger$ & this option only affects the system when the temperature falls below $\temperature{liq} = \Mc{T}_{liq}\left(\avMassFraction[j]{}\right)_{j\in \speciesSet}$\n
- $^\ddagger$ & when this option is set to ``no'', if two liquid phases are obtained, \textit{a posteriori}, a single liquid composition (and enthalpy) is calculated from the overall composition of these two liquids by an additional local equilibrium calculation where the miscibility gap is ignored (see \Sect{redox}, this calculation gives the oxygen distribution in the different compounds that minimizes the Gibbs energy of this single liquid phase). Note that this approach is not thermodynamically consistent but it is used for comparison purpose.
+ $^\ddagger$ & when this option is set to ``no'', if two liquid phases are obtained, \textit{a posteriori}, a single liquid composition (and enthalpy) is calculated from the overall composition of these two liquids by an additional local equilibrium calculation where the miscibility gap is ignored (this calculation gives the oxygen distribution in the different compounds that minimizes the Gibbs energy of this single liquid phase). Note that this approach is not thermodynamically consistent but it is used for comparison purpose.
  \end{legend}
 \end{center}
 \caption{Computational cases description in terms of segregation hypotheses} \label{tab:eos}
@@ -210,41 +210,41 @@ First of all, the following comments can be made regarding the solidification re
  \item one can notice that \T{equilibrium} and \T{independent solidification} options give very similar results (see \Figs{x-T_C32_1850_OpenCalphad_NUCLEA9_eq}{x-T_C32_1850_OpenCalphad_NUCLEA9_separatedLiquidEqs}) with a maximum difference of about 18K (resp. 2.6\%) in temperature (resp. phase mass fraction) for $x_{steel}=0.4$;
  \item the differences between \T{equilibrium} and \T{Scheil-Gulliver} options are also very limited in terms of phase fractions with a maximum of 0.8\% for $x_{steel}\in[0.65, 0.95]$. In terms of temperature, the difference increases when $x_{steel}$ increases: it is limited to 8K in the range $x_{steel}\in[0.15, 0.45[$ (while the oxidic liquid phase is present) but increases more rapidly for larger values of $x_{steel}$, reaching 164K for $x_{steel}=1.0$.
 \end{itemize}
-Then, as excepted, the comparison of \T{equilibrium} and \T{MAAP-like} (see \Figs{x-T_C32_1850_OpenCalphad_NUCLEA9_eq}{x-T_C32_1850_OpenCalphad_NUCLEA9_separatedEqs}) exhibits large differences:
+Then, as excepted, the comparison of \T{equilibrium} and \T{independent systems} (see \Figs{x-T_C32_1850_OpenCalphad_NUCLEA9_eq}{x-T_C32_1850_OpenCalphad_NUCLEA9_separatedEqs}) exhibits large differences:
 \begin{itemize}
- \item below the onset of solidification (for $x_{steel}\in]0.15, 0.2[$ and $x_{steel}\in]0.2, 0.25[$ for \T{equilibrium} and \T{MAAP-like} respectively), the temperature difference goes up to 135K while the mass partitioning between oxidic and metallic phase differs by up to 18.3\%;
- \item when solidification occurs, the maximum discrepancy is obtained for $x_{steel}=0.45$ with a difference in temperature (resp. phase mass fraction) of 270K (resp. 42.1\% for the liquid oxidic). Indeed, the oxidic liquid phase vanishes at $x_{steel}=0.45$ in the \T{equilibrium} case while its mass fraction is still of 10.3\% for $x_{steel}=0.8$ (and decreases very slowly when $x_{steel}$ is further increased) with \T{MAAP-like} option.
+ \item below the onset of solidification (for $x_{steel}\in]0.15, 0.2[$ and $x_{steel}\in]0.2, 0.25[$ for \T{equilibrium} and \T{independent systems} respectively), the temperature difference goes up to 135K while the mass partitioning between oxidic and metallic phase differs by up to 18.3\%;
+ \item when solidification occurs, the maximum discrepancy is obtained for $x_{steel}=0.45$ with a difference in temperature (resp. phase mass fraction) of 270K (resp. 42.1\% for the liquid oxidic). Indeed, the oxidic liquid phase vanishes at $x_{steel}=0.45$ in the \T{equilibrium} case while its mass fraction is still of 10.3\% for $x_{steel}=0.8$ (and decreases very slowly when $x_{steel}$ is further increased) with \T{independent systems} option.
 \end{itemize}
 Finally, noticeable differences are obtained between \T{equilibrium} and \T{single liquid equilibrium} options for $x_{steel} < 0.45$. In particular, the onset of solidification is below $x_{steel} < 0.05$ for \T{single liquid equilibrium} and the introduction of steel induces a rather steep decrease of the temperature in such a way that the temperature difference between both options reaches 139K for $x_{steel} = 0.05$. The difference in phase mass fraction reaches 74.3\% for the liquid oxidic phase at $x_{steel} = 0.1$ as this phase vanishes with the \T{single liquid equilibrium} option. As mentioned earlier, the treatment of the liquid miscibility gap in the \T{single liquid equilibrium} option is not thermodynamically consistent and it was used for comparison purpose; the behavior of the liquid and solid oxidic phases fractions in this case for low $x_{steel}$ confirms that it is not a valuable option.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 \centering
-\begin{subfigure}[t]{0.4\textwidth}
- \centering \includegraphics[width=\textwidth]{/home/rl211391/develop/procor/physics/Java/rundir/studies/CalphadBasedEOSTest/OpenCalphad_NUCLEA9_eq/C32_1850_x-T.eps} 
+\begin{subfigure}[t]{0.48\textwidth}
+ \centering \includegraphics[width=\textwidth]{figures/CalphadBasedEOSTest/OpenCalphad_NUCLEA9_eq/C32_1850_x-T.eps} 
 \caption{$\omega_\gamma$, $\bar{\temperature{}}$ and $\temperature{liq}$ vs. $x_{steel}$ - \T{equilibrium} option} \label{fig:x-T_C32_1850_OpenCalphad_NUCLEA9_eq} 
 \end{subfigure}
 \hspace{0.01\textwidth}%
-\begin{subfigure}[t]{0.4\textwidth}
- \centering \includegraphics[width=\textwidth]{/home/rl211391/develop/procor/physics/Java/rundir/studies/CalphadBasedEOSTest/OpenCalphad_NUCLEA9_separatedEqs/C32_1850_x-T.eps} 
-\caption{$\omega_\gamma$, $\bar{\temperature{}}$ and $\temperature{liq}$ vs. $x_{steel}$ - \T{MAAP-like}} \label{fig:x-T_C32_1850_OpenCalphad_NUCLEA9_separatedEqs} 
+\begin{subfigure}[t]{0.48\textwidth}
+ \centering \includegraphics[width=\textwidth]{figures/CalphadBasedEOSTest/OpenCalphad_NUCLEA9_separatedEqs/C32_1850_x-T.eps} 
+\caption{$\omega_\gamma$, $\bar{\temperature{}}$ and $\temperature{liq}$ vs. $x_{steel}$ - \T{independent systems}} \label{fig:x-T_C32_1850_OpenCalphad_NUCLEA9_separatedEqs} 
 \end{subfigure}
 \\
-\begin{subfigure}[t]{0.4\textwidth} 
- \centering \includegraphics[width=\textwidth]{/home/rl211391/develop/procor/physics/Java/rundir/studies/CalphadBasedEOSTest/OpenCalphad_NUCLEA9_scheilGulliver/C32_1850_x-T.eps} 
+\begin{subfigure}[t]{0.48\textwidth} 
+ \centering \includegraphics[width=\textwidth]{figures/CalphadBasedEOSTest/OpenCalphad_NUCLEA9_scheilGulliver/C32_1850_x-T.eps} 
 \caption{$\omega_\gamma$, $\bar{\temperature{}}$ and $\temperature{liq}$ vs. $x_{steel}$ - \T{Scheil-Gulliver}} \label{fig:x-T_C32_1850_OpenCalphad_NUCLEA9_scheilGulliver} 
 \end{subfigure}
 \hspace{0.01\textwidth}%
-\begin{subfigure}[t]{0.4\textwidth} 
- \centering \includegraphics[width=\textwidth]{/home/rl211391/develop/procor/physics/Java/rundir/studies/CalphadBasedEOSTest/OpenCalphad_NUCLEA9_separatedLiquidEqs/C32_1850_x-T.eps} 
+\begin{subfigure}[t]{0.48\textwidth} 
+ \centering \includegraphics[width=\textwidth]{figures/CalphadBasedEOSTest/OpenCalphad_NUCLEA9_separatedLiquidEqs/C32_1850_x-T.eps} 
 \caption{$\omega_\gamma$, $\bar{\temperature{}}$ and $\temperature{liq}$ vs. $x_{steel}$ - \T{independent solidification}} \label{fig:x-T_C32_1850_OpenCalphad_NUCLEA9_separatedLiquidEqs} 
 \end{subfigure}
 \\
-\begin{subfigure}[b]{0.9\textwidth}
-\hskip 0.04\textwidth
+\begin{subfigure}[t]{1.0\textwidth}
+% \hskip 0.01\textwidth
 \begin{tabular}{cc}
-   \includegraphics[width=0.4444\textwidth]{/home/rl211391/develop/procor/physics/Java/rundir/studies/CalphadBasedEOSTest/OpenCalphad_NUCLEA9_eq_noLiquidSeparation/C32_1850_x-T.eps} 
+   \includegraphics[width=0.48\textwidth]{figures/CalphadBasedEOSTest/OpenCalphad_NUCLEA9_eq_noLiquidSeparation/C32_1850_x-T.eps} 
  & \begin{minipage}[b]
-{0.4444\textwidth} In this case, only one liquid phase is present throughout the sequence. However, we have kept the same plot features as in the other cases in such a way that for $x_{steel} \in ]0.05, 0.1[$, the nature (``oxidic'' or ``metallic'') of the liquid phase is changed according to the criterion we have used so far. \end{minipage}
+{0.48\textwidth} In this case, only one liquid phase is present throughout the sequence. However, we have kept the same plot features as in the other cases in such a way that for $x_{steel} \in ]0.05, 0.1[$, the nature (``oxidic'' or ``metallic'') of the liquid phase is changed according to the criterion we have used so far. \end{minipage}
 \end{tabular}
 \caption{$\omega_\gamma$, $\bar{\temperature{}}$ and $\temperature{liq}$ vs. $x_{steel}$ - \T{single liquid equilibrium}} \label{fig:x-T_C32_1850_OpenCalphad_NUCLEA9_eq_noLiquidSeparation} 
 \end{subfigure}
@@ -253,15 +253,14 @@ Finally, noticeable differences are obtained between \T{equilibrium} and \T{sing
 
 As discussed previously, results reported in \cite{Bakouta2015} have shown that the adequate closure of conservation equations for a multilayer in-vessel corium behavior model is an issue when thermochemical interactions are considered. Consistency in terms of thermodynamical hypotheses between these closure relationships and thermochemical modeling should be ensured as far as possible and, at least, when the associated impact on the overall model is important. In this context, the following conclusions can be drawn from this benchmark: 
 \begin{itemize}
- \item the important impact of steel-corium interaction on the EOS is confirmed. In addition, consistency with thermochemical modeling of interacting metal and oxidic phases rules out the simplified approach (\T{MAAP-like} option) used in MAAP code EOS;
+ \item the important impact of steel-corium interaction on the EOS is confirmed. In addition, consistency with thermochemical modeling of interacting metal and oxidic phases rules out the simplified approach (\T{independent systems} option) used in MAAP code EOS;
 
  \item the impact of liquid separation at equilibrium on the EOS cannot be neglected and neither \T{equilibrium} nor \T{single liquid equilibrium} options offer an adequate general solution. The \T{single liquid equilibrium} option is not thermodynamically consistent while assuming instantaneous equilibrium (\T{equilibrium} option) may not be coherent with the coupling to thermochemical kinetic models. Actually, constructing an EOS that treats adequately and in a general way the liquid miscibility gap in this context appears as impossible. As a consequence, the liquid phase separation related to this liquid miscibility gap should be explicitly modeled ``out of '' the EOS on a case-by-case basis depending on the conditions of thermochemical interaction between liquid molten steel and suboxidized corium. 
  
  
- Note that, in many cases, the macroscopic conservation equations are written over spatial zones that have an overall composition out of such a miscibility gap and this problem is not raised. For instance, it can be so for a multilayer corium pool model assuming that the hydrodynamic separation of liquid phases is always fast in comparison with other phenomena. In this case, it requires the explicit treatment of all possible molten steel and suboxidized corium interactions (depending on molten steel relocation hypotheses in the corium lower head modeling). Only an inter-layer mass transfer model (such as \cite{LeTellier2014} implemented in PROCOR and MAAP-EDF) is needed when steel is supposed to always relocate on top of the oxidic pool as in the PROCOR model. However, when steel migration through the crust to the oxidic pool is taken into account (as in recent MAAP-EDF version, see  \cite{Bakouta2016}), an explicit model of the related thermochemical interaction should be introduced in such a way 
-that, neglecting the hydrodynamic transient, the steel components relocation on top and/or bottom of the oxidic layer is calculated;
+ Note that, in many cases, the macroscopic conservation equations are written over spatial zones that have an overall composition out of such a miscibility gap and this problem is not raised. For instance, it can be so for a multilayer corium pool model assuming that the hydrodynamic separation of liquid phases is always fast in comparison with other phenomena. In this case, it requires the explicit treatment of all possible molten steel and suboxidized corium interactions (depending on molten steel relocation hypotheses in the corium lower head modeling). Only an inter-layer mass transfer model (such as \cite{LeTellier2014} implemented in PROCOR and MAAP-EDF) is needed when steel is supposed to always relocate on top of the oxidic pool as in the PROCOR model. However, when steel migration through the crust to the oxidic pool is taken into account , an explicit model of the related thermochemical interaction should be introduced in such a way that, neglecting the hydrodynamic transient, the steel components relocation on top and/or bottom of the oxidic layer is calculated;
  
-  \item the different options related to the solidification path have a more limited impact in the limited range of composition and temperature covered in this benchmark. In any case, from the point of view of the EOS construction, they do not induce additional difficulties. Note that, in the context of PROCOR corium pool model, taking into account a possible solid phase fraction in the liquid layer bulk will require further modifications of the thermal modeling. The associated detailed analysis has not been done yet but, at least, the dynamic viscosity model will have to be modified (as in \cite{Boulin2014} for corium-concrete interaction applications) along with some heat transfer closure laws.
+  \item the different options related to the solidification path have a more limited impact in the limited range of composition and temperature covered in this benchmark. In any case, from the point of view of the EOS construction, they do not induce additional difficulties. Note that, in the context of PROCOR corium pool model, taking into account a possible solid phase fraction in the liquid layer bulk will require further modifications of the thermal modeling. The associated detailed analysis has not been done yet but, at least, the dynamic viscosity model will have to be modified (as in \cite{Spindler2006} for corium-concrete interaction applications) along with some heat transfer closure laws.
 \end{itemize}
 
 
