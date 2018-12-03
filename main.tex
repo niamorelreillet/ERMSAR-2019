@@ -16,7 +16,8 @@
 \usepackage{pdfpages}
 
 \usepackage{amsmath}
-\usepackage{caption,subcaption,color}
+\usepackage{caption}
+\usepackage{subcaption,color}
 \usepackage{makeidx}
 \usepackage{multirow}
 \usepackage{xspace}
@@ -50,13 +51,30 @@
 \renewcommand{\headrulewidth}{0pt}
 \fancyfoot[RO,RE]{\fontsize{8}{10}\selectfont \bf \thepage/\pageref{LastPage}}
 
-%\setlength{\parskip}{1em}
+\setlength\parindent{0pt}
+\setlength{\parskip}{1em}
 
 % \renewenvironment{abstract}{\global\setbox\absbox=\vbox\bgroup
 %   \hsize=\textwidth\def\baselinestretch{1}%
 %   \noindent\unskip\begin{center}\textbf{Abstract}\end{center}
 %  \par\medskip\noindent\unskip\ignorespaces}
 %  {\egroup}
+
+\captionsetup{labelsep=period,labelfont=bf,font={bf}}
+\renewcommand{\thetable}{\Roman{table}}
+
+\makeatletter
+\patchcmd{\@maketitle}{\LARGE}{\fontsize{14}{17}\selectfont}{}{}
+\makeatother
+
+\renewcommand\Authfont{\bfseries}
+\setlength{\affilsep}{0pt}
+\titleformat{\section}{\bfseries}{\thetitle.}{1em}{\MakeUppercase}
+\titlespacing*{\section}{0pt}{0pt}{0pt}
+\titleformat{\subsection}{\normalfont\bfseries}{\thetitle.}{0.5em}{}
+\titlespacing*{\subsection}{0pt}{0pt}{0pt}
+\titleformat{\subsubsection}{\normalfont\bfseries}{\thetitle.}{0.2em}{}
+\titlespacing*{\subsubsection}{0pt}{0pt}{0pt}
  
 \bibliographystyle{abbrv}
 
@@ -97,18 +115,9 @@
 \newcommand{\Sec}[1]{\Sect{#1}}
 \newcommand{\App}[1]{Appendix~\ref{app:#1}}
 
-\makeatletter
-\patchcmd{\@maketitle}{\LARGE}{\fontsize{14}{17}\selectfont}{}{}
-\makeatother
-
 \include{notations_lpma}
 
 
-\renewcommand\Authfont{\bfseries}
-\setlength{\affilsep}{0pt}
-\titleformat{\section}{\bfseries}{\thetitle.}{1em}{\MakeUppercase}
-\titleformat{\subsection}{\normalfont\bfseries}{\thetitle.}{1em}{}
-\titleformat{\subsubsection}{\normalfont\bfseries}{\thetitle.}{1em}{}
 
 \begin{document}
 
@@ -131,11 +140,14 @@
 
 \thispagestyle{fancy}
 
-\section*{Abstract} 
+\section*{Abstract}
+abstract
 
 \section*{\hfill Keywords}
+\vskip -\baselineskip
 \hfill \texttt{in-vessel corium, CALPHAD, thermodynamic properties, tabulation, interpolation}
 
+\vskip \baselineskip
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -168,13 +180,30 @@ First, different segregation hypotheses that can be made when constructing such 
 \section{Sampling, storage and interpolation of CALPHAD-based thermodynamic properties} \label{sect:practical}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+In this second part of the paper, some considerations regarding the tabulation and interpolation strategies of CALPHAD-based thermodynamic properties for in-vessel corium are presented. As mentioned in the introduction, the ``mock-up'' model discussed in \cite{Tiwari2018} for the solidification for the ternary U-O-Zr system makes direct use of the Open-Calphad code. This direct approach raises two issues. 
+
+First of all, the computational time associated with a Gibbs energy minimizing code may not be compatible with the requirements on execution time of the lumped parameter modeling for in-vessel corium. While parallel computing (in shared memory as reported in \cite{Sundman2016} for Open-Calphad) can be a valuable option for distributed parameters models (see, for instance, \cite{Introini2018} for the use of Open-Calphad in a nuclear fuel performance code), the associated benefits for lumped parameter models, that are typically used for Monte-Carlo based statistical study, is less clear. 
+
+Then, considering the U-O-Zr-steel system, the peculiarities of its phase diagram (in particular, the liquid miscibility gap) can induce convergence issues (either non-convergence or misconvergence) when minimizing the Gibbs energy in order to calculate a thermodynamic equilibrium. Such a phenomenon was typically observed when producing the results depicted at \Fig{x-T_C32_1850}. More particularly, the root-finding problem associated with \Eq{t(h)} is solved by an iterative algorithm (Brent type) that can fail due to misconvergence in the underlying equilibrium calculations (e.g. ``flickering'' of the phases found at equilibrium in a limited temperature range). In the present study, such problems have reccurently appeared in the region where the two liquid phases and the solid face-centered cubic (U,Zr)O$_{2-x}$ phase phases coexist. A strategy based on the comparison of the Gibbs energy values obtained from equilibrium calculations with different parameters (in terms of miscibility gap treatment, database phases that are considered in the calculation and so on) for given composition and temperature have been used and was found successful to obtain the results of \Fig{x-T_C32_1850}. However, such a strategy increases the overall computational time and, in other cases, was not able to ensure convergence.
+
+As a consequence, in the MAAP-EDF and PROCOR codes, tabulation and interpolation strategies regarding the CALPHAD-based thermodynamic properties have been envisaged and are under development. Taking into account the convergence issue that have just been discussed, a general dynamic interpolation scheme such as the one proposed in \cite{Larsson2015} has not been retained. From there, considering a ``static'' interpolation (where all interpolation points have been precalculated), one is faced, in the general case,  with a ``curse of dimensionality'' issue as the size of the variable space scales with the power of the number of components. 
+
+However, in the framework of in-vessel corium modeling, this very general issue can be mitigated by:
+\begin{itemize}
+ \item reducing the ranges of compositions and temperature to the domain of interest for the associated corium models;
+ \item adopting a adaptive-mesh refinement strategy for the construction of the interpolation grid.
+\end{itemize}
+More particularly, from the point of view of equilibrium calculations (whose input variables are $\left(\elementMassFraction[i]{}\right)_{i\in\elementSet}$, the element mass fractions and $\temperature{}$, the temperature), in-vessel models requires data for a temperature ranging from $\Mc{T}_{liq}\left(\elementMassFraction[i]{}\right)_{i\in\elementSet}$ to $\Mc{T}_{liq}\left(\elementMassFraction[i]{}\right)_{i\in\elementSet} + \Delta\temperature{}$ with $\Delta\temperature{}$ limited to a few hundreds of degrees.
+
+% \cite{Larsson2015} \cite{Pillai2016}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusions and perspectives} \label{sect:concl}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section*{Acknowledgments}
 
-\section*{References}
 \bibliography{../../References/lma-jabref}
 
 \end{document}

@@ -24,7 +24,7 @@ while the associated interface conditions can be formulated as:
 \end{equation}
 \Eq{ie2} is sometimes referred to as Kotchine's theorem, written here, for the sake of simplicity without any singular term (\textit{i.e.} no accumulation, generation or transport of property $p$ on the interface).
 
-In particular, when considering in-vessel corium model, such equations are written for $p=\massEnthalpy{}$, the mass enthalpy, in such a way that \Eq{mce3} is the energy conservation equation for $\domain{n}$ (neglecting viscous dissipation and the effect of the pressure material derivative)\footnote{These assumptions are compatible with the Boussinesq approximation of fluid dynamics often used for treating corium natural convection.}. Along with mass and energy conservation, as discussed in the introduction, corium complex thermodynamics requires to keep track of the composition of $\domain{n}$. Here, we will consider that this is achieved by writing conservation equation with $p=\massFraction[j]{}$, the mass fraction of stoichiometric species $j$ ($j\in \speciesSet$).
+In particular, when considering in-vessel corium model, such equations are written for $p=\massEnthalpy{}$, the mass enthalpy, in such a way that \Eq{mce3} is the energy conservation equation for $\domain{n}$ (neglecting viscous dissipation and the effect of the pressure material derivative)\footnote{These assumptions are compatible with the Boussinesq approximation of fluid dynamics often used for treating corium natural convection.}. Along with mass and energy conservation, as discussed in the introduction, corium complex thermodynamics requires to keep track of the composition of $\domain{n}$. Here, we will consider that this is achieved by writing conservation equation with $p=\massFraction[j]{}$, the mass fraction of stoichiometric species $j$ ($j\in \speciesSet$). The associated element set is denoted $\elementSet$.
 
 \begin{table}[H]
 \caption{notations associated with integral conservation equations} \label{tab:notations_eq}
@@ -115,7 +115,7 @@ As a consequence, in the general case, $\Mc{H}^{\gamma}$, function of $y_{k}^{(s
 
 \subsection{Numerical tests on possible segregation hypotheses} \label{sect:num}
 
-We report here some tests that have been carried out in the framework of the PROCOR platform for testing different segregation hypotheses on a very simple case. The CALPHAD numerical tool that has been used is Open-Calphad through an interface in PROCOR (\cite{Sundman2016}). CALPHAD data that have been used are limited to U-O-Zr-Fe elements and are taken from the NUCLEA'09 database. In this work, the temperature that is considered is between $[1800, 3100]$K and for the composition range of interest, only the liquid phase (denoted \T{LIQUID}) and the solid face-centered cubic (U,Zr)O$_{2-x}$ phase (denoted \T{C1\_FCC}) have been considered. Both phases are described by a non-ideal associate model based on the following stoichiometric species as constituents: U, UO$_2$, Zr, ZrO$_2$, Fe, Fe$_2$O$_3$, FeO and O.
+We report here some tests that have been carried out in the framework of the PROCOR platform for testing different segregation hypotheses on a very simple case. The CALPHAD numerical tool that has been used is Open-Calphad through an interface in PROCOR (\cite{Sundman2016}). CALPHAD data that have been used are limited to $\elementSet = \left\{U,O,Zr,Fe\right\}$ elements and are taken from the NUCLEA'09 database. In this work, the temperature that is considered is between $[1800, 3100]$K and for the composition range of interest, only the liquid phase (denoted \T{LIQUID}) and the solid face-centered cubic (U,Zr)O$_{2-x}$ phase (denoted \T{C1\_FCC}) have been considered. Both phases are described by a non-ideal associate model based on the following stoichiometric species as constituents $\speciesSet = \left\{ U, UO_2, Zr, ZrO_2, Fe, Fe_2O_3, FeO, O \right\}$.
 
 \begin{remark}{} 
 Actually, below 2000K, solid phases other than \T{C1\_FCC} can be stable. In particular, when the temperature is lowered, the next solid phases to be formed are the tetragonal (Zr,U)O$_{2-x}$ phase (\T{TET(OXIDE)}) and the $\alpha$-Zr(O) phase (\T{HCP\_A3}) depending on the solidification path.
@@ -260,6 +260,3 @@ Then, the impact of liquid separation at equilibrium on the EOS cannot be neglec
 \end{remark}
 
 Finally, the different options related to the solidification path have a more limited impact in the limited range of composition and temperature covered in this benchmark. In any case, from the point of view of the EOS construction, they do not induce additional difficulties. Note that, taking into account a possible solid phase fraction in the liquid layer bulk requires further modifications of the thermal modeling; at least, the dynamic viscosity model will have to be modified along with some heat transfer closure laws.
-
-
-
