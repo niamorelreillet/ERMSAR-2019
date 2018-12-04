@@ -76,7 +76,7 @@
 \titleformat{\subsubsection}{\normalfont\bfseries}{\thetitle.}{0.2em}{}
 \titlespacing*{\subsubsection}{0pt}{0pt}{0pt}
  
-\bibliographystyle{abbrv}
+\bibliographystyle{ieeetr}
 
 \newenvironment{legend}
 {\tabular{r>{\small} p{0.9\textwidth}}}
@@ -91,6 +91,8 @@
 \newenvironment{remark}[1][\textit{Nota Bene}]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries \rule{1ex}{1ex} #1}]\ignorespaces}{\rule{1ex}{1ex} \end{trivlist}\ignorespacesafterend}
 
+\setlist[itemize]{noitemsep, topsep=0pt}
+\setlist[enumerate]{noitemsep, topsep=0pt}
 
 % notations
 \newcommand{\T}{\texttt}
@@ -193,9 +195,36 @@ However, in the framework of in-vessel corium modeling, this very general issue 
  \item reducing the ranges of compositions and temperature to the domain of interest for the associated corium models;
  \item adopting a adaptive-mesh refinement strategy for the construction of the interpolation grid.
 \end{itemize}
-More particularly, from the point of view of equilibrium calculations (whose input variables are $\left(\elementMassFraction[i]{}\right)_{i\in\elementSet}$, the element mass fractions and $\temperature{}$, the temperature), in-vessel models requires data for a temperature ranging from $\Mc{T}_{liq}\left(\elementMassFraction[i]{}\right)_{i\in\elementSet}$ to $\Mc{T}_{liq}\left(\elementMassFraction[i]{}\right)_{i\in\elementSet} + \Delta\temperature{}$ with $\Delta\temperature{}$ limited to a few hundreds of degrees.
 
-% \cite{Larsson2015} \cite{Pillai2016}
+Let us now discuss such a tabulation strategy that have been developed for thermodynamic equilibria.
+
+Regarding the composition space, in-vessel corium is made of suboxidized corium (U-O-Zr system) relocated from the core and molten ablated structures or vessel wall made of different steels (Fe-Ni-Cr system). As a consequence, instead of spanning directly the composition space in terms of element mass fractions \textit{i.e.} $\left\{ \left\{\elementMassFraction[i]{}\right\}_{i\in \elementSet} \in \left[0,1\right]^{\dim(\elementSet)} : \sum_{i\in \elementSet} \elementMassFraction[i]{} = 1 \right\}$ where $\elementSet = \left\{U,Zr,O,Fe,Ni,Cr\right\}$, the interpolation points (in terms of composition) can be constructed according to the following variables:
+\begin{itemize}
+ \item the U/Zr molar ratio $R_{U/Zr}$ that is mainly associated with the reactor design and typically ranges from 0.8 for boiling light water reactors to 1.3 for pressurized light water reactors;
+ \item the Zr molar oxidation degree $C_{Zr}$ that is scenario dependent and typically ranges between 30\% and 100\%;
+ \item the ratio between the steel and suboxidized corium masses, $x_{steel}$.
+\end{itemize}
+The advantage of using such variables is that the associated domain is an hyperrectangle (in comparison to the hyperpyramid defined by the element mass fractions) that ease the use of local adaptive refinement and adequately cover the composition of interest for in-vessel corium modeling. Then, in terms of temperature, in-vessel models require data for ranging from $\Mc{T}_{liq}\left(\elementMassFraction[i]{}\right)_{i\in\elementSet}$\footnote{At the cooled boundary of the corium pool, a solid crust can be formed and, assuming local equilibrium, the interface temperature associated with solidification is the liquidus temperature of the liquid in the boundary layer.} to $\Mc{T}_{liq}\left(\elementMassFraction[i]{}\right)_{i\in\elementSet} + \Delta\temperature{}$ with $\Delta\temperature{}$ limited to a few hundreds of degrees. 
+
+Based on such a composition and temperature space, a two-stage scheme is used for calculating and storing equilibria:
+\begin{enumerate}
+ \item phase transition calculations (associated with the apparition of the face-centered cubic (U,Zr)O$_{2-x}$ phase, \T{C1\_FCC}) for a oxyde-metal corium) are performed in order to evaluate the liquidus temperatures over composition space;
+ \item based on the composition grid of the previous step, fixed-temperature equilibrium calculations are performed for temperature grids defined over $\left[\Mc{T}_{liq}\left(\elementMassFraction[i]{}\right)_{i\in\elementSet}, \Mc{T}_{liq}\left(\elementMassFraction[i]{}\right)_{i\in\elementSet} + \Delta\temperature{}\right]$.
+\end{enumerate}
+
+At both stage, an adaptive-mesh refinement strategy has been implemented. In order to illustrate it, let us take the example of the first calculation stage dedicated to the liquidus temperature tabulation. 
+
+Considering an initial conforming coarse composition grid defined in terms of $R_{U/Zr}$, $C_{Zr}$, $x_{steel}$, phase transition calculations are performed for the different grid points. Then, an interpolation over these points is constructed\footnote{For the time being, we have used the so-called microsphere interpolation method proposed in \cite{Dudziak2007} and implemented in the Apache commons math library \cite{Apache2016}} and local refinement proceeds as follows; for each cell of composition hypercube grid,
+\begin{enumerate}
+ \item the liquidus temperature interpolated at the cell center is compared with a phase transition calculation performed for the associated composition;
+ \item if the distance between these two values exceeds a given accuracy criterion, the cell is splitted along each axis into two;
+ \item phase transition calculations are performed for all the newly created grid points.
+\end{enumerate}
+This refinement procedure can be iterated several times until the distance between interpolated and calculated values is small enough.
+
+In addition, in order to circumvent possible convergence issues, we have introduced in the process an additional ``check'' step where, for a given grid, the associated calculated equilibria are checked in order to detect possible misconvergence problem. For instance, considering the first stage and the liquidus temperature calculation, such a verification is carried out by performing fixed-temperature equilibrium calculations around the previously calculated liquidus temperature to ensure that the threshold of solid phase apperance has been correctly evaluated. If it is not the case, equilibrium calculations by a temperature sweep are carried out in order to correct the evaluation of the liquidus temperature.
+
+\emph{@Benoit: si tu peux ajouter une ou deux figures pour illustrer et commenter, je suis preneur !}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -203,6 +232,8 @@ More particularly, from the point of view of equilibrium calculations (whose inp
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section*{Acknowledgments}
+
+This work is funded by the IVMR grant agreement number 662157 (H2020) and, in the framework of the PROCOR platform development, by CEA, EDF and Framatome.
 
 \bibliography{../../References/lma-jabref}
 
