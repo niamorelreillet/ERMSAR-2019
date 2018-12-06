@@ -49,11 +49,9 @@ $\avFlux[p]{n, \textrm{ext}}$ & [p].m$^{-2}$.s$^{-1}$ & average flux of property
 \subsection{Closure requirements} \label{sect:req}
 
 For any spatial zone spatial $\domain{}$, the closure of energy conservation equations requires enthalpy-temperature relations and, in the framework of multicomponent systems, the dependence of such relations to chemical composition is of importance (see \cite{Schneider1991}) and should be treated adequately. 
-
 \begin{remark}
 In the remainder, the pressure possible dependence of these functions will be neglected and we will consider that the corium materials density is not affected by pressure. This is a reasonable assumption for corium liquid phases compatible with the Boussinesq approximation of fluid dynamics (see \cite{Hills1991}) often used for modeling natural convection in this context.
 \end{remark}
-
 In this framework, for a given thermodynamic system, the enthalpy-temperature relations may be described in a general way by a function referred to as an ``Equation-Of-State'' (EOS) and described by:
 \begin{equation}
  \Mc{H}: \avTemperature{}, \left(\avMassFraction[j]{}\right)_{j\in \speciesSet} \rightarrow  \left(\omega_\gamma, \avMassEnthalpy{\gamma}, \left(\massFraction[j]{\gamma}\right)_{j\in \speciesSet}\right)_{\gamma \in \phaseSet} \label{eq:eos}
@@ -101,13 +99,12 @@ In practice, for corium CALPHAD databases, only the gas phase is modeled as depe
 
 As discussed in the introduction, the enthalpy-temperature relations (\Eq{Hm1}) as obtained from CALPHAD data are an interesting starting point in order to construct an EOS for energy conservation equations, see for instance \cite{Voller2006,Du2007}. In particular, in the framework of corium behavior modeling, such CALPHAD data are already in use in thermochemical models through equilibrium calculations and, in \cite{Tiwari2018}, a corium solidification model for the ternary U-O-Zr system making an extensive use of U-O-Zr CALPHAD data was successfully tested. It has confirmed the feasibility of using the CALPHAD database to obtain thermodynamically consistent closures for the conservation equations in terms of interface conditions associated with a local equilibrium hypothesis and enthalpy-temperature relations as a function of composition. Regarding the latter point, under the hypotheses of this model, the two spatial zones (liquid and solid) were known to be monophasic in such a way that the enthalpy-temperature relations were directly provided by two $\Mc{H}^{\gamma}$ functions without any complication.
 
-However, in the general case, an EOS given by \Eq{eos} has to describe configurations where the spatial $\domain{}$ is multiphasic; in the context of integral corium models, such cases occur when:
+However, in the general case, an EOS given by \Eq{eos} has to describe configurations where the spatial zone $\domain{}$ is multiphasic; in the context of integral corium models, such cases occur when:
 \begin{itemize}
 \item the temperature of a domain $\avTemperature{}$ falls below $\Mc{T}_{liq}\left(\avMassFraction[j]{}\right)_{j\in \speciesSet}$ (the liquidus temperature associated with the average composition) \textit{i.e.} a solid phase appears along with the liquid phase. In this case, solidification hypotheses are needed to bridge the gap between CALPHAD enthalpy-temperature relations for the different liquid and solid phases and the EOS that has to provide the species phase partitioning;
 \item the average composition of the spatial domain $\left(\avMassFraction[j]{}\right)_{j\in \speciesSet}$ is in a miscibility gap region \textit{i.e.} from the point of view of the thermodynamic equilibrium, two immiscible phases (with the same description in terms of phase model in CALPHAD database but different compositions) are expected. In this case, additional hypotheses regarding this phase decomposition are needed for the construction of the EOS.
 \end{itemize}
 In a general way, CALPHAD data should be supplemented by phase segregation hypotheses and models for the construction of the desired EOS. It should be emphasized that these hypotheses should be made, as far as possible, consistent with thermochemical models to which the thermal model under consideration is coupled with. This is not a trivial matter and it is the main issue that was raised regarding MAAP-EDF in-vessel corium modeling because of the clear inconsistency between the ``native'' MAAP EOS and the hypotheses of the stratification kinetic model introduced in MAAP-EDF. 
-
 \begin{remark}
 From the conservation equations point of view, we have considered that the composition of a spatial zone is described in terms of species through $\left(\avMassFraction[j]{}\right)_{j\in \speciesSet}$. It is the case, for instance, in PROCOR and TOLBIAC-ICB \cite{Spindler2006} codes where physical properties such as density or conductivity are obtained from mixing laws applied to species density functions of temperature. 
 As a consequence, in the general case, $\Mc{H}^{\gamma}$, function of $y_{k}^{(s)}$, cannot be used directly for the EOS construction and a ``conversion'' is needed. In the remainder, for the sake of simplicity, we will restrict ourselves to CALPHAD models with only one sublattice for which the constituents are stoichiometric species. In particular, this is the case for the non-ideal associate modeling used in the NUCLEA database \cite{Cheynet2002} for the phases of interest for in-vessel corium in the range of compositions and temperatures considered in \Sect{num}.
@@ -116,7 +113,6 @@ As a consequence, in the general case, $\Mc{H}^{\gamma}$, function of $y_{k}^{(s
 \subsection{Numerical tests on possible segregation hypotheses} \label{sect:num}
 
 We report here some tests that have been carried out in the framework of the PROCOR platform for testing different segregation hypotheses on a very simple case. The CALPHAD numerical tool that has been used is Open-Calphad through an interface in PROCOR (\cite{Sundman2016}). CALPHAD data that have been used are limited to $\elementSet = \left\{U,O,Zr,Fe\right\}$ elements and are taken from the NUCLEA'09 database. In this work, the temperature that is considered is between $[1800, 3100]$K and for the composition range of interest, only the liquid phase (denoted \T{LIQUID}) and the solid face-centered cubic (U,Zr)O$_{2-x}$ phase (denoted \T{C1\_FCC}) have been considered. Both phases are described by a non-ideal associate model based on the following stoichiometric species as constituents $\speciesSet = \left\{ U, UO_2, Zr, ZrO_2, Fe, Fe_2O_3, FeO, O \right\}$.
-
 \begin{remark}{} 
 Actually, below 2000K, solid phases other than \T{C1\_FCC} can be stable. In particular, when the temperature is lowered, the next solid phases to be formed are the tetragonal (Zr,U)O$_{2-x}$ phase (\T{TET(OXIDE)}) and the $\alpha$-Zr(O) phase (\T{HCP\_A3}) depending on the solidification path.
 \end{remark}
@@ -141,7 +137,6 @@ Then, \Eqss{bulk_m1}{bulk_w1}{bulk_h1} are time-integrated and expressed in term
  \mass{} \avMassEnthalpy{} &=& \mass{ox} \left(\massEnthalpy{ox} + \massEnthalpy{steel} x_{steel}\right)
 \end{eqnarray}
 This simple sequence is used to compare different EOS $\Mc{T}\left(\avMassEnthalpy{}, \left(\avMassFraction[j]{}\right)_{j\in \speciesSet}\right)$ in terms of $\avTemperature{}$, $\left(\omega_\gamma, \left(\avMassFraction[j]{\gamma}\right)_{j\in \speciesSet}\right)_{\gamma \in \phaseSet}$ as a function of $x_{steel}$. The liquidus temperature $\temperature{liq} = \Mc{T}_{liq}\left(\avMassFraction[j]{}\right)_{j\in \speciesSet}$ is also evaluated. In this sequence, the temperature is always above the steel liquidus temperature. 
-
 %\begin{remark}{}
 %In late 2016, CEA and EDF have used such a benchmark to compare different numerical tools. This joint work will be the subject of a technical report by EDF early 2017. In the present report, we only give and discuss results obtained by CEA and focus on the modeling aspects related to phase segregation in the EOS. In addition, in the EDF-CEA benchmark, three different cases where the oxidation degree of the corium and the steel temperature were varied have been treated while in the remainder, we will present and discuss only one case as the observations in terms of segregation hypotheses are similar.
 %\end{remark}
@@ -210,7 +205,18 @@ Then, as excepted, the comparison of \T{equilibrium} and \T{independent systems}
 \end{itemize}
 Finally, noticeable differences are obtained between \T{equilibrium} and \T{single liquid equilibrium} options for $x_{steel} < 0.45$. In particular, the onset of solidification is below $x_{steel} < 0.05$ for \T{single liquid equilibrium} and the introduction of steel induces a rather steep decrease of the temperature in such a way that the temperature difference between both options reaches 139K for $x_{steel} = 0.05$. The difference in phase mass fraction reaches 74.3\% for the liquid oxidic phase at $x_{steel} = 0.1$ as this phase vanishes with the \T{single liquid equilibrium} option. As mentioned earlier, the treatment of the liquid miscibility gap in the \T{single liquid equilibrium} option is not thermodynamically consistent and it was used for comparison purpose; the behavior of the liquid and solid oxidic phases fractions in this case for low $x_{steel}$ confirms that it is not a valuable option.
 
-\begin{figure}[htb!]
+\subsubsection{Conclusions and recommendations}
+
+As discussed previously, results reported in \cite{Bakouta2015} have shown that the adequate closure of conservation equations for a multilayer in-vessel corium behavior model is an issue when thermochemical interactions are considered. Consistency in terms of thermodynamical hypotheses between these closure relationships and thermochemical modeling should be ensured as far as possible and, at least, when the associated impact on the overall model is important. In this context, the following recommendations for the EOS construction can be drawn from this benchmark.
+
+First of all, the important impact of steel-corium interaction on the EOS is confirmed. In addition, consistency with thermochemical modeling of interacting metal and oxidic phases rules out the simplified approach (\T{independent systems} option) used in some codes.
+
+Then, the impact of liquid separation at equilibrium on the EOS cannot be neglected and neither \T{equi\-librium} nor \T{single liquid equilibrium} options offer an adequate general solution. The \T{single liquid equilibrium} option is not thermodynamically consistent while assuming instantaneous equilibrium (\T{equi\-librium} option) may not be coherent with the coupling to thermochemical kinetic models. Actually, constructing an EOS that treats adequately and in a general way the liquid miscibility gap in this context appears as impossible. As a consequence, the liquid phase separation related to this liquid miscibility gap should be explicitly modeled ``out of '' the EOS on a case-by-case basis depending on the conditions of thermochemical interaction between liquid molten steel and suboxidized corium. 
+\begin{remark}
+ Note that, in many cases, the macroscopic conservation equations are written over spatial zones that have an overall composition out of such a miscibility gap and this problem is not raised. For instance, it can be so for a multilayer corium pool model assuming that the hydrodynamic separation of liquid phases is always fast in comparison with other phenomena. In this case, it requires the explicit treatment of all possible molten steel and suboxidized corium interactions (depending on molten steel relocation hypotheses in the corium lower head modeling). Only an inter-layer mass transfer model (such as \cite{LeTellier2014} implemented in PROCOR and MAAP-EDF) is needed when steel is supposed to always relocate on top of the oxidic pool as in the PROCOR model. However, when steel migration through the crust to the oxidic pool is taken into account , an explicit model of the related thermochemical interaction should be introduced in such a way that, neglecting the hydrodynamic transient, the steel components relocation on top and/or bottom of the oxidic layer is calculated.
+\end{remark}
+
+\begin{figure}[H]
 \centering
 \begin{subfigure}[t]{0.48\textwidth}
  \centering \includegraphics[width=\textwidth]{figures/CalphadBasedEOSTest/OpenCalphad_NUCLEA9_eq/C32_1850_x-T.eps} 
@@ -246,17 +252,5 @@ Finally, noticeable differences are obtained between \T{equilibrium} and \T{sing
 \end{subfigure}
 \caption{$\bar{\temperature{}}$, $\temperature{liq}$ and $\omega_\gamma$ as a function of $x_{steel}$ for the different computational cases} \label{fig:x-T_C32_1850} 
 \end{figure}
-
-\subsubsection{Conclusions and recommendations}
-
-As discussed previously, results reported in \cite{Bakouta2015} have shown that the adequate closure of conservation equations for a multilayer in-vessel corium behavior model is an issue when thermochemical interactions are considered. Consistency in terms of thermodynamical hypotheses between these closure relationships and thermochemical modeling should be ensured as far as possible and, at least, when the associated impact on the overall model is important. In this context, the following recommendations for the EOS construction can be drawn from this benchmark.
-
-First of all, the important impact of steel-corium interaction on the EOS is confirmed. In addition, consistency with thermochemical modeling of interacting metal and oxidic phases rules out the simplified approach (\T{independent systems} option) used in some codes.
-
-Then, the impact of liquid separation at equilibrium on the EOS cannot be neglected and neither \T{equi\-librium} nor \T{single liquid equilibrium} options offer an adequate general solution. The \T{single liquid equilibrium} option is not thermodynamically consistent while assuming instantaneous equilibrium (\T{equi\-librium} option) may not be coherent with the coupling to thermochemical kinetic models. Actually, constructing an EOS that treats adequately and in a general way the liquid miscibility gap in this context appears as impossible. As a consequence, the liquid phase separation related to this liquid miscibility gap should be explicitly modeled ``out of '' the EOS on a case-by-case basis depending on the conditions of thermochemical interaction between liquid molten steel and suboxidized corium. 
- 
-\begin{remark}
- Note that, in many cases, the macroscopic conservation equations are written over spatial zones that have an overall composition out of such a miscibility gap and this problem is not raised. For instance, it can be so for a multilayer corium pool model assuming that the hydrodynamic separation of liquid phases is always fast in comparison with other phenomena. In this case, it requires the explicit treatment of all possible molten steel and suboxidized corium interactions (depending on molten steel relocation hypotheses in the corium lower head modeling). Only an inter-layer mass transfer model (such as \cite{LeTellier2014} implemented in PROCOR and MAAP-EDF) is needed when steel is supposed to always relocate on top of the oxidic pool as in the PROCOR model. However, when steel migration through the crust to the oxidic pool is taken into account , an explicit model of the related thermochemical interaction should be introduced in such a way that, neglecting the hydrodynamic transient, the steel components relocation on top and/or bottom of the oxidic layer is calculated.
-\end{remark}
 
 Finally, the different options related to the solidification path have a more limited impact in the limited range of composition and temperature covered in this benchmark. In any case, from the point of view of the EOS construction, they do not induce additional difficulties. Note that, taking into account a possible solid phase fraction in the liquid layer bulk requires further modifications of the thermal modeling; at least, the dynamic viscosity model will have to be modified along with some heat transfer closure laws.

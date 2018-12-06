@@ -76,7 +76,7 @@
 \titleformat{\subsubsection}{\normalfont\bfseries}{\thetitle.}{0.2em}{}
 \titlespacing*{\subsubsection}{0pt}{0pt}{0pt}
  
-\bibliographystyle{ieeetr}
+\bibliographystyle{IEEEtran}
 
 \newenvironment{legend}
 {\tabular{r>{\small} p{0.9\textwidth}}}
@@ -123,7 +123,7 @@
 
 \begin{document}
 
-\title{\vspace{-1em}\bf \MakeUppercase{Consistent use of CALPHAD data for in-vessel corium pool modeling:} \\ \MakeUppercase{some analytical and practical considerations}}
+\title{\vspace{-1em}\bf \MakeUppercase{Consistent use of CALPHAD data for in-vessel corium pool modeling: some analytical and practical considerations}}
 \date{}
 
 \author{R. Le Tellier}
@@ -142,9 +142,15 @@
 
 \thispagestyle{fancy}
 
+\setlength{\parskip}{0em}
 \section*{Abstract}
-abstract
+In the frame of in-vessel corium modeling, the associated thermodynamic representation of the sub-oxidized corium-steel system is of prime importance. In addition to thermochemical modeling aspects related to phase-component partitioning (e.g. for the liquid phases and the related phase stratification), such thermodynamic information is needed in order to provide closures to the integral energy conservations, in particular in terms of enthalpy-temperature relations as a function of the composition.
 
+In order to ensure consistency, a same thermodynamic representation of the system (that can be refered to as an ``Equation-Of-State'' -- EOS) should be used throughout all the different models and closures. Severe accident dedicated thermodynamic databases constructed by the CALPHAD method offer such a representation.
+
+Following a recent work where a corium solidification model for the ternary U-O-Zr system making an extensive use of U-O-Zr CALPHAD data was successfully tested, this paper discusses two additional aspects associated with this approach. First, different possible phase segregation hypotheses that can be used for constructing an EOS from a CALPHAD database are presented and tested on a simple test case. In particular, the impact of the treatement of the liquid miscibility gap in enthalpy-temperature relations is highlighted. Then, for the sake of robusteness and performance in the context of lumped parameter models, a ``static'' interpolation approach for constructing the EOS is proposed. It involves the precalculation and storage of different CALPHAD-based quantities (in particular thermodynamic equilibria). In order to optimize the number of interpolation points, the use of an adaptive-mesh refinement strategy is reported.
+
+\setlength{\parskip}{1em}
 \section*{\hfill Keywords}
 \vskip -\baselineskip
 \hfill \texttt{in-vessel corium, CALPHAD, thermodynamic properties, tabulation, interpolation}
@@ -211,6 +217,7 @@ Based on such a composition and temperature space, a two-stage scheme is used fo
  \item phase transition calculations (associated with the apparition of the face-centered cubic (U,Zr)O$_{2-x}$ phase, (\T{C1\_FCC}) for a oxyde-metal corium) are performed in order to evaluate the liquidus temperatures over composition space;
  \item based on the composition grid of the previous step, fixed-temperature equilibrium calculations are performed for temperature grids defined over $\left[\Mc{T}_{liq}\left(\elementMassFraction[i]{}\right)_{i\in\elementSet}, \Mc{T}_{liq}\left(\elementMassFraction[i]{}\right)_{i\in\elementSet} + \Delta\temperature{}\right]$.
 \end{enumerate}
+The storage of all these equilibrium-related data is done in an HDF5 finle using the HDFql library \cite{hdfql}.
 
 At both stage, an adaptive-mesh refinement strategy has been implemented. In order to illustrate it, let us take the example of the first calculation stage dedicated to the liquidus temperature tabulation. 
 
@@ -222,7 +229,8 @@ Considering an initial conforming coarse composition grid defined in terms of $R
 \end{enumerate}
 This refinement procedure can be iterated several times until the distance between interpolated and calculated values is small enough.
 
-In addition, in order to circumvent possible convergence issues, we have introduced in the process an additional ``check'' step where, for a given grid, the associated calculated equilibria are checked in order to detect possible misconvergence problem. For instance, considering the first stage and the liquidus temperature calculation, such a verification is carried out by performing fixed-temperature equilibrium calculations around the previously calculated liquidus temperature to ensure that the threshold of solid phase apperance has been correctly evaluated. If it is not the case, equilibrium calculations by a temperature sweep are carried out in order to correct the evaluation of the liquidus temperature.
+In addition, in order to circumvent possible convergence issues, we have introduced in the process an additional ``check'' step where, for a given grid, the associated calculated equilibria are checked in order to detect possible misconvergence problem. For instance, considering the first stage and the liquidus temperature calculation, such a verification is carried out by performing fixed-temperature equilibrium calculations around the previously calculated liquidus temperature to ensure that the threshold of solid phase apperance has been correctly evaluated. If it is not the case, equilibrium calculations by a temperature sweep are carried out in order to correct the evaluation of the liquidus temperature. Note that, in the near future, the NucleaToolbox code (the computational thermodynamics code developed by ISRN for the NUCLEA database) is to be used as an alternative tool for this ``check'' step.
+
 
 \emph{@Benoit: si tu peux ajouter une ou deux figures pour illustrer et commenter, je suis preneur !}
 
@@ -230,6 +238,17 @@ In addition, in order to circumvent possible convergence issues, we have introdu
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusions and perspectives} \label{sect:concl}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+This paper has been focused on two different aspects regarding the construction of an in-vessel corium EOS based on a CALPHAD database. The final goal of such an EOS is to provide thermodynamically consistent closures for the coupled  thermochemical and thermal models describing the in-vessel corium behavior. 
+In a first part, the enthalpy-temperature relations that can be constructed from a CALPHAD-based representation of the underlying thermodynamic system have been discussed. More particularly, a simple numerical test case have been used for comparing enthalpy-temperature relations with different segregation hypotheses for the treatment of a multiphasic spatial zone. From this analysis, three main conclusions can be drawn:
+\begin{itemize}
+ \item the important impact of steel-corium interaction is confirmed and has to be taken into account;
+ \item when the average composition of the spatial zone is within the liquid miscibility gap, considering or not the liquid separation has a large effect on the EOS. It has been suggested that this liquid separation should be explicitly modeled on a case-by-case basis depending on the conditions of thermochemical interaction between liquid molten steel and suboxidized corium;
+ \item when the temperature falls below the liquidus temperature associated with the average composition of the spatial zone, the different options related to the solidification path have a more limited impact in the limited range of composition and temperature covered in this benchmark.
+\end{itemize}
+In a second part, the practical construction of such an EOS has been discussed. For the sake of robusteness and performance in the context of lumped parameter models, a ``static'' interpolation approach has been presented. It involves the precalculation and storage of different CALPHAD-based quantities (in particular thermodynamic equilibrium) and, in order to optimize the number of interpolation points, the use of an adaptive-mesh refinement strategy has been illustrated. 
+
+The next step in this ongoing work is the actual construction and verification of a ``complete'' EOS to be used for the in-vessel corium modeling of the PROCOR code. A benchmark exercise against an alternative approach under development at EDF to construct such an EOS for MAAP-EDF code is also planned.
 
 \section*{Acknowledgments}
 
