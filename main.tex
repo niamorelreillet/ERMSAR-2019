@@ -221,18 +221,36 @@ The storage of all these equilibrium-related data is done in an HDF5 finle using
 
 At both stage, an adaptive-mesh refinement strategy has been implemented. In order to illustrate it, let us take the example of the first calculation stage dedicated to the liquidus temperature tabulation. 
 
-Considering an initial conforming coarse composition grid defined in terms of $R_{U/Zr}$, $C_{Zr}$, $x_{steel}$, phase transition calculations are performed for the different grid points. Then, an interpolation over these points is constructed\footnote{For the time being, we have used the so-called microsphere interpolation method proposed in \cite{Dudziak2007} and implemented in the Apache commons math library \cite{Apache2016}} and local refinement proceeds as follows; for each cell of composition hypercube grid,
+Considering an initial conforming coarse composition grid defined in terms of $R_{U/Zr}$, $C_{Zr}$, $x_{steel}$, phase transition calculations are performed for the different grid points (see. figure \ref{fig:Tab0}). Then, an interpolation over these points is constructed\footnote{For the time being, we have used the so-called microsphere interpolation method proposed in \cite{Dudziak2007} and implemented in the Apache commons math library \cite{Apache2016}} and local refinement proceeds as follows; for each cell of composition hypercube grid,
 \begin{enumerate}
  \item the liquidus temperature interpolated at the cell center is compared with a phase transition calculation performed for the associated composition;
  \item if the distance between these two values exceeds a given accuracy criterion, the cell is splitted along each axis into two;
  \item phase transition calculations are performed for all the newly created grid points.
 \end{enumerate}
-This refinement procedure can be iterated several times until the distance between interpolated and calculated values is small enough.
+This refinement procedure can be iterated several times until the distance between interpolated and calculated values is small enough. 
+A grid built with such a strategy, an accuracy criterion of 5K and for 4 iterations is presented figure \ref{fig:TabOptRefined}; it contains 5135 points. This tabulation can be compared with another one built with a raw refinement strategy (at each iteration, all the cells are refined), only 2 iterations and containing 4913 points (which is comparable with the previous grid), see. \ref{fig:TabRowRefined}. It is noticeable that the adaptive mesh refinement concentrates the points where variation of the liquidus temperature is the highest; moreover it can provide an accuracy value of the interpolation. 
+
+\begin{figure}[H]
+\centering
+ \centering \includegraphics[width=0.5\textwidth]{figures/CalphadBasedEOSTest/TabulatedBases/Tab0.png} 
+\caption{{Liquidus Temperature on initial conforming grid (X: $R_{U/Zr}$, Y: $C_{Zr}$, Z: $x_{steel}$})} \label{fig:Tab0} 
+\end{figure}
+\begin{figure}[H]
+\centering
+\begin{subfigure}[t]{0.48\textwidth}
+ \centering \includegraphics[width=\textwidth]{figures/CalphadBasedEOSTest/TabulatedBases/TabOpt4_c5.png}
+\caption{Adaptive-mesh refined grid (5135 points)} \label{fig:TabOptRefined} 
+\end{subfigure}
+
+\begin{subfigure}[t]{0.48\textwidth}
+ \centering \includegraphics[width=\textwidth]{figures/CalphadBasedEOSTest/TabulatedBases/Tab2_inter2.png}
+\caption{Row refined grid (4913 points)} \label{fig:TabRowRefined} 
+\end{subfigure}
+\caption{Liquidus Temperature on refined grids (X: $R_{U/Zr}$, Y: $C_{Zr}$, Z: $x_{steel}$)}
+\end{figure}
 
 In addition, in order to circumvent possible convergence issues, we have introduced in the process an additional ``check'' step where, for a given grid, the associated calculated equilibria are checked in order to detect possible misconvergence problem. For instance, considering the first stage and the liquidus temperature calculation, such a verification is carried out by performing fixed-temperature equilibrium calculations around the previously calculated liquidus temperature to ensure that the threshold of solid phase apperance has been correctly evaluated. If it is not the case, equilibrium calculations by a temperature sweep are carried out in order to correct the evaluation of the liquidus temperature. Note that, in the near future, the NucleaToolbox code (the computational thermodynamics code developed by ISRN for the NUCLEA database) is to be used as an alternative tool for this ``check'' step.
 
-
-\emph{@Benoit: si tu peux ajouter une ou deux figures pour illustrer et commenter, je suis preneur !}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
