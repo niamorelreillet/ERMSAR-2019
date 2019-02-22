@@ -230,22 +230,21 @@ Considering an initial conforming coarse composition grid defined in terms of $R
 \end{enumerate}
 This refinement procedure can be iterated several times until the distance between interpolated and calculated values is small enough. 
 
-Starting from the uniform coarse grid depicted at \Fig{Tab0}, a grid built with such a strategy (with an accuracy criterion on temperature set to 5$\degree$ and after 4 iterations) is presented at \Fig{TabOptRefined}; it contains 5135 points. This tabulation can be compared with another one obtained with a uniform refinement strategy (at each iteration, all the cells are refined) ; after, only 2 iterations, this uniform grid depicted at \Fig{TabRowRefined} contains 4913 points (about the same number of points as in the previous grid). Comparing these two grids, the potential gain associated with such an adaptive mesh refinement can clearly be seen: it is noticeable that the adaptive mesh refinement concentrates the grid points where the variations of the liquidus temperature are the highest. 
+Starting from the uniform coarse grid depicted at \Fig{Tab0}, a grid built with such a strategy (with an accuracy criterion on temperature set to 5$\degree$ and after 4 iterations) is presented at \Fig{TabOptRefined}; it contains 5135 points. This tabulation can be compared with another one obtained with a uniform refinement strategy (at each iteration, all the cells are refined) ; after, only 2 iterations, this uniform grid depicted at \Fig{TabRowRefined} contains 4913 points (about the same number of points as in the previous grid). Comparing these two grids, the potential gain associated with such an adaptive mesh refinement can clearly be seen: it is noticeable that the adaptive mesh refinement concentrates the grid points where the variations of the liquidus temperature are the highest (for $x_{steel}$ values below $0.3$ and $C_{Zr}$ values below $0.7$). 
 
 \begin{figure}[H]
 \centering
- \centering \includegraphics[width=0.5\textwidth]{figures/CalphadBasedEOSTest/TabulatedBases/Tab0.png} 
+ \centering \includegraphics[width=0.49\textwidth]{figures/CalphadBasedEOSTest/TabulatedBases/Tab0_B.png} 
 \caption{{Liquidus temperature on the initial conforming grid (X: $R_{U/Zr}$, Y: $C_{Zr}$, Z: $x_{steel}$})} \label{fig:Tab0} 
 \end{figure}
 \begin{figure}[H]
 \centering
-\begin{subfigure}[t]{0.48\textwidth}
- \centering \includegraphics[width=\textwidth]{figures/CalphadBasedEOSTest/TabulatedBases/TabOpt4_c5.png}
+\begin{subfigure}{0.49\textwidth}
+ \centering \includegraphics[width=\textwidth]{figures/CalphadBasedEOSTest/TabulatedBases/TabOpt4_c5_B.png}
 \caption{Adaptively refined grid (5135 points)} \label{fig:TabOptRefined} 
 \end{subfigure}
-
-\begin{subfigure}[t]{0.48\textwidth}
- \centering \includegraphics[width=\textwidth]{figures/CalphadBasedEOSTest/TabulatedBases/Tab2_inter2.png}
+\begin{subfigure}{0.49\textwidth}
+ \centering \includegraphics[width=\textwidth]{figures/CalphadBasedEOSTest/TabulatedBases/Tab2_inter2_B.png}
 \caption{Uniformly refined grid (4913 points)} \label{fig:TabRowRefined} 
 \end{subfigure}
 \caption{Liquidus temperature on different refined grids (X: $R_{U/Zr}$, Y: $C_{Zr}$, Z: $x_{steel}$)}
